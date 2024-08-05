@@ -1,0 +1,39 @@
+---
+- name: set up raspberry pis
+  hosts: rpis
+  become: yes
+
+  tasks: 
+  - name: update apt package cache
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: upgrade apt dist packages
+    apt:
+      upgrade: dist
+
+# change shell to zsh
+
+  - name: Install unattended upgrades package. 
+    apt:
+      name: unattended-upgrades 
+      state: present
+
+  - name: Copy unattended-upgrades configuration files in place. 
+    copy:
+      src: "templates/{{ item }}" 
+      dest: "/etc/apt/apt.conf.d/{{ item }}" 
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - 20auto-upgrades
+      - 50unattended-upgrades
+
+#  - name: check date
+#    command: date
+#    register: output
+#
+#  - debug: msg="{{ output.stdout_lines }}"
+

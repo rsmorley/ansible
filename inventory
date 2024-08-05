@@ -1,0 +1,3 @@
+[rpis]
+rpi-nas ansible_host=192.168.20.10
+rpi-hl ansible_host=192.168.20.20

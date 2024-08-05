@@ -1,0 +1,61 @@
+---
+- name: set up raspberry pis
+  hosts: rpis
+  become: yes
+
+  tasks: 
+
+  - name: install zsh, fzf zoxide
+    apt:
+      pkg:
+      - zsh
+      - fzf
+#      - fonts-jetbrains-mono
+      - zoxide
+      state: present
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: set user scoot shell to zsh
+    user:
+      name: scoot
+      shell: /bin/zsh
+
+  - name: Copy zsh rc files into ~/
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      owner: scoot
+      group: scoot
+      mode: 0644
+    with_items:
+      - src: "dotfiles/.zshrc"
+        dest: "~/.zshrc"
+      - src: "dotfiles/.p10k.zsh"
+        dest: "~/.p10k.zsh"
+      - src: "dotfiles/.tmux.conf"
+        dest: "~/.tmux.conf"
+    become: no
+
+  - name: install git, password-store, neovim and tmux
+    apt:
+      pkg:
+      - git
+      - neovim
+      - tmux
+      - pass
+      state: present
+  
+  - name: Git checkout tpm, tmux plugin manager
+    ansible.builtin.git:
+      repo: 'https://github.com/tmux-plugins/tpm'
+      dest: ~/.tmux/plugins/tpm
+    become: no
+
+
+#  - name: check date
+#    command: date
+#    register: output
+#
+#  - debug: msg="{{ output.stdout_lines }}"
+
