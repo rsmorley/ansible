@@ -10,7 +10,6 @@
       pkg:
       - zsh
       - fzf
-#      - fonts-jetbrains-mono
       - zoxide
       state: present
       update_cache: yes
@@ -44,6 +43,8 @@
       - neovim
       - tmux
       - pass
+      - bat
+      - eza
       state: present
   
   - name: Git checkout tpm, tmux plugin manager

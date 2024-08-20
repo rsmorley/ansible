@@ -80,11 +80,19 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --color=always $realpath'
+# zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --tree --color $realpath'
 
-# Aliases
-alias ls='ls --color'
+# set ctrl-t, alt-c previews
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# ---- Eza (better ls) -----
+alias ls="eza --color=always --long --no-filesize --icons=always --no-time --no-user --no-permissions"
 
 # Shell integrations
 
@@ -99,9 +107,12 @@ bindkey '\C-e' fzf-cd-widget
 unalias zi
 eval "$(zoxide init zsh)"
 
-# add local bin to path
+# add local bin and nvim to path
 export PATH=$PATH:/home/scoot/bin
+export PATH="$PATH:/opt/nvim-linux64/bin"
 
 export EDITOR=nvim
 
 alias vim=nvim
+
+alias cd=z

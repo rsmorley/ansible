@@ -13,8 +13,6 @@
     apt:
       upgrade: dist
 
-# change shell to zsh
-
   - name: Install unattended upgrades package. 
     apt:
       name: unattended-upgrades 
