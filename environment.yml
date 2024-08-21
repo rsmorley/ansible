@@ -1,6 +1,8 @@
 ---
-- name: set up raspberry pis
-  hosts: rpis
+- name: set up sbcs
+  hosts: 
+    - rpis
+    - zblades
   become: yes
 
   tasks: 
@@ -32,8 +34,8 @@
         dest: "~/.zshrc"
       - src: "dotfiles/.p10k.zsh"
         dest: "~/.p10k.zsh"
-      - src: "dotfiles/.tmux.conf"
-        dest: "~/.tmux.conf"
+        #      - src: "dotfiles/.tmux.conf"
+        #        dest: "~/.tmux.conf"
     become: no
 
   - name: install git, password-store, neovim and tmux
@@ -41,22 +43,14 @@
       pkg:
       - git
       - neovim
-      - tmux
+      #      - tmux
       - pass
       - bat
       - eza
       state: present
   
-  - name: Git checkout tpm, tmux plugin manager
-    ansible.builtin.git:
-      repo: 'https://github.com/tmux-plugins/tpm'
-      dest: ~/.tmux/plugins/tpm
-    become: no
-
-
-#  - name: check date
-#    command: date
-#    register: output
-#
-#  - debug: msg="{{ output.stdout_lines }}"
-
+      #  - name: Git checkout tpm, tmux plugin manager
+      #    ansible.builtin.git:
+      #      repo: 'https://github.com/tmux-plugins/tpm'
+      #      dest: ~/.tmux/plugins/tpm
+      #    become: no
