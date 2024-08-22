@@ -30,38 +30,38 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Load completions
-autoload -Uz compinit && compinit
+#autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
 # key bindings
-bindkey -v
-export KEYTIMEOUT=1
+bindkey -e
+# vim specific # export KEYTIMEOUT=1
 
 # Use vim keys in tab complete menu:
 bindkey '^j' history-search-forward
 bindkey '^k' history-search-backward
 
 # Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
-}
-zle -N zle-keymap-select
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
-}
-zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+#function zle-keymap-select {
+#  if [[ ${KEYMAP} == vicmd ]] ||
+#     [[ $1 = 'block' ]]; then
+#    echo -ne '\e[1 q'
+#  elif [[ ${KEYMAP} == main ]] ||
+#       [[ ${KEYMAP} == viins ]] ||
+#       [[ ${KEYMAP} = '' ]] ||
+#       [[ $1 = 'beam' ]]; then
+#    echo -ne '\e[5 q'
+#  fi
+#}
+#zle -N zle-keymap-select
+#zle-line-init() {
+#    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+#    echo -ne "\e[5 q"
+#}
+#zle -N zle-line-init
+#echo -ne '\e[5 q' # Use beam shape cursor on startup.
+#preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 #history
 HISTSIZE=5000
@@ -96,9 +96,17 @@ alias ls="eza --color=always --long --no-filesize --icons=always --no-time --no-
 
 # Shell integrations
 
-# fzf
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
+# fzf bindings and completions in nix
+if [ -n "${commands[fzf-share]}" ]; then
+  source "$(fzf-share)/key-bindings.zsh"
+  source "$(fzf-share)/completion.zsh"
+fi
+# fzf bindings and completions in ubuntu
+if [ -n "/usr/share/doc/fzf/examples" ]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+  source /usr/share/doc/fzf/examples/completion.zsh
+fi
+
 # remap Alt-c to Ctrl-e
 bindkey '\C-e' fzf-cd-widget
 
@@ -107,9 +115,8 @@ bindkey '\C-e' fzf-cd-widget
 unalias zi
 eval "$(zoxide init zsh)"
 
-# add local bin and nvim to path
-export PATH=$PATH:/home/scoot/bin
-export PATH="$PATH:/opt/nvim-linux64/bin"
+# add local bin to path
+export PATH=$PATH:/Users/scoot/bin
 
 export EDITOR=nvim
 

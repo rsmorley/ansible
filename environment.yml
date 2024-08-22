@@ -1,5 +1,5 @@
 ---
-- name: set up sbcs
+- name: set up sbc environments
   hosts: 
     - rpis
     - zblades
