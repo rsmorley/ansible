@@ -30,13 +30,12 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Load completions
-#autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
 # key bindings
 bindkey -e
-# vim specific # export KEYTIMEOUT=1
 
 # Use vim keys in tab complete menu:
 bindkey '^j' history-search-forward
@@ -115,11 +114,20 @@ bindkey '\C-e' fzf-cd-widget
 unalias zi
 eval "$(zoxide init zsh)"
 
+# create function to change cwd when exiting yazzi
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+} 
+
 # add local bin to path
 export PATH=$PATH:/Users/scoot/bin
 
 export EDITOR=nvim
-
 alias vim=nvim
 
 alias cd=z

@@ -1,6 +1,8 @@
 ---
 - name: setup neovim
-  hosts: rpis
+  hosts: 
+  - rpis
+  - zblades
 
   tasks: 
 
