@@ -92,6 +92,7 @@ export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
 # ---- Eza (better ls) -----
 alias ls="eza --color=always --long --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias ll="eza --color=always --long --icons=always"
 
 # Shell integrations
 

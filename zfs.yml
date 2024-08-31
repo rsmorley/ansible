@@ -1,0 +1,24 @@
+---
+- name: setup zfs
+  hosts: 
+  - rpis
+  - zblades
+
+  tasks: 
+
+  - name: install zfs kernal modules and utils
+    apt:
+      pkg:
+      - zfs-dkms
+      - zfsutils-linux
+      - samba
+      state: present
+      update_cache: yes
+      cache_valid_time: 3600
+    become: yes
+
+  # - name: Git checkout NvChad
+  #   ansible.builtin.git:
+  #     repo: 'https://github.com/NvChad/NvChad'
+  #     dest: "~/.config/nvim"
+  #     depth: 1

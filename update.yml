@@ -1,0 +1,24 @@
+---
+- name: update sbcs
+  hosts: 
+    - rpis
+    - zblades
+  become: yes
+
+  tasks:
+
+  - name: upgrade apt dist packages
+    apt:
+      upgrade: dist
+      update_cache: yes
+      cache_valid_time: 3600
+      autoremove: yes
+      autoclean: yes
+    register: result
+
+  - name: List installed and updated packages
+    shell: rg -e "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
+    register: result
+
+  - name: Show Output
+    debug: msg="{{ result.stdout_lines }}"
