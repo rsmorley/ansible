@@ -7,6 +7,19 @@
 
   tasks: 
 
+  - name: One way to avoid apt_key once it is removed from your distro, armored keys should use .asc extension, binary should use .gpg
+    block:
+      - name: somerepo | no apt key
+        ansible.builtin.get_url:
+          url: https://raw.githubusercontent.com/eza-community/eza/main/deb.asc
+          dest: /etc/apt/keyrings/gierens.asc
+          #checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
+
+      - name: somerepo | apt source
+        ansible.builtin.apt_repository:
+          repo: "deb [signed-by=/etc/apt/keyrings/gierens.asc] http://deb.gierens.de stable main"
+          state: present
+
   - name: install zsh, fzf zoxide, and replacement shell utils
     apt:
       pkg:
@@ -25,7 +38,7 @@
       name: scoot
       shell: /bin/zsh
 
-  - name: Copy zsh rc files into ~/
+  - name: Copy zsh/p10k dotfiles files into ~/
     copy:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}" 
@@ -41,6 +54,18 @@
         #        dest: "~/.tmux.conf"
     become: no
 
+  - name: Copy btop config files into ~/.config
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      owner: scoot
+      group: scoot
+      mode: 0644
+    with_items:
+      - src: "configfiles/btop"
+        dest: "~/.config"
+    become: no
+
   - name: install git, password-store, neovim, tmux, etc
     apt:
       pkg:
@@ -50,13 +75,6 @@
       - pass
       state: present
 
-      # TOD0: ansiblize this
-      #sudo mkdir -p /etc/apt/keyrings
-      #wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-      #echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
-      #sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-      #sudo apt update
-      #sudo apt install -y eza  
       #  - name: Git checkout tpm, tmux plugin manager
       #    ansible.builtin.git:
       #      repo: 'https://github.com/tmux-plugins/tpm'
