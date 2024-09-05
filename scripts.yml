@@ -1,0 +1,58 @@
+---
+- name: copy x86 binaries to zblades
+  hosts: 
+    - zblades
+  become: yes
+  gather_facts: no
+
+  tasks: 
+  - name: Copy gotify to /usr/bin
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      mode: 0755
+    with_items:
+      - src: "bin/gotify-amd64"
+        dest: "/usr/bin/gotify"
+
+- name: copy arm binaries to rpis
+  hosts: 
+    - rpis
+  become: yes
+  gather_facts: no
+
+  tasks: 
+  - name: Copy gotify to /usr/bin
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      mode: 0755
+    with_items:
+      - src: "bin/gotify-arm64"
+        dest: "/usr/bin/gotify"
+
+- name: setup scripts and cron tabs
+  hosts: 
+    - rpis
+    - zblades
+  become: no
+  gather_facts: no
+
+  tasks: 
+  - name: Copy update script to ~/bin
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      owner: scoot
+      group: scoot
+      mode: 0744
+    with_items:
+      - src: "scripts/update-notifier.sh"
+        dest: "/home/scoot/bin/"
+
+  - name: check for apt updates at 06:00
+    ansible.builtin.cron:
+      name: "check for apt updates"
+      minute: "0"
+      hour: "6"
+      job: "/home/scoot/bin/update-notifier.sh"
