@@ -11,14 +11,9 @@
       pkg:
       - zfs-dkms
       - zfsutils-linux
+      - sanoid
       - samba
       state: present
       update_cache: yes
       cache_valid_time: 3600
     become: yes
-
-  # - name: Git checkout NvChad
-  #   ansible.builtin.git:
-  #     repo: 'https://github.com/NvChad/NvChad'
-  #     dest: "~/.config/nvim"
-  #     depth: 1

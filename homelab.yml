@@ -24,13 +24,13 @@
   # Pulls the portainer image (Ubuntu)
   - name: Pull portainer image
     community.docker.docker_image:
-      name: "portainer/portainer-ce:linux-amd64"
+      name: "portainer/portainer-ce:linux-arm64"
       source: pull
 
   - name: Create portainer container
     community.docker.docker_container:
       name: "portainer"
-      image: "portainer/portainer-ce:linux-amd64"
+      image: "portainer/portainer-ce:linux-arm64"
       restart_policy: always
       state: started
       ports:

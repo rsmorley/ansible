@@ -93,7 +93,9 @@ export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 # ---- Eza (better ls) -----
 alias ls="eza --color=always --long --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias ll="eza --color=always --long --icons=always"
+alias la="eza --color=always --long --icons=always -a"
 
+alias bat=batcat
 # Shell integrations
 
 # fzf bindings and completions in nix
@@ -126,7 +128,12 @@ function yy() {
 } 
 
 # add local bin to path
-export PATH=$PATH:/Users/scoot/bin
+if [ -n "/Users/scoot/bin" ]; then
+  export PATH=$PATH:/Users/scoot/bin
+fi
+if [ -n "/home/scoot/bin" ]; then
+  export PATH=$PATH:/home/scoot/bin
+fi
 
 export EDITOR=nvim
 alias vim=nvim

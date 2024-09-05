@@ -4,10 +4,11 @@
     - rpis
     - zblades
   become: yes
+  gather_facts: no
 
   tasks: 
 
-  - name: One way to avoid apt_key once it is removed from your distro, armored keys should use .asc extension, binary should use .gpg
+  - name: add eza repo and key
     block:
       - name: somerepo | no apt key
         ansible.builtin.get_url:
@@ -66,17 +67,10 @@
         dest: "~/.config"
     become: no
 
-  - name: install git, password-store, neovim, tmux, etc
+  - name: install git, password-store
     apt:
       pkg:
       - git
-      - neovim
-      #      - tmux
       - pass
       state: present
 
-      #  - name: Git checkout tpm, tmux plugin manager
-      #    ansible.builtin.git:
-      #      repo: 'https://github.com/tmux-plugins/tpm'
-      #      dest: ~/.tmux/plugins/tpm
-      #    become: no

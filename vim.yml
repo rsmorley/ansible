@@ -1,23 +1,54 @@
 ---
-- name: setup neovim
+- name: install neovim 10 on rpis
   hosts: 
-  - rpis
-  - zblades
+    - rpis
+  become: yes
+  gather_facts: no
 
   tasks: 
+  - name: copy neovim deb pkg to /var/tmp
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}" 
+      owner: scoot
+      group: scoot
+      mode: 0644
+    with_items:
+      - src: "packages/nvim-linux64.deb"
+        dest: "/var/tmp/"
 
-  # Update to use neovim 10
-  - name: install neovim
+  - name: install neovim 10
+    apt:
+      deb: "/var/tmp/nvim-linux64.deb"
+
+  - name: install ripgrep for nvchad
+    apt:
+      pkg:
+      - ripgrep
+      state: present
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Git checkout nvchad for neovim config
+    ansible.builtin.git:
+      repo: "https://github.com/NvChad/starter.git"
+      dest: "~/.config/nvim/"
+      version: main
+      accept_newhostkey: yes
+      depth: 1
+    become: no
+
+
+- name: install neovim 9 on zblades
+  hosts: 
+    - zblades
+  become: yes
+  gather_facts: no
+
+  tasks: 
+  - name: install neovim 9
     apt:
       pkg:
       - neovim
       state: present
-      update_cache: yes
-      cache_valid_time: 3600
-    become: yes
 
-  - name: Git checkout NvChad
-    ansible.builtin.git:
-      repo: 'https://github.com/NvChad/NvChad'
-      dest: "~/.config/nvim"
-      depth: 1
