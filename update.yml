@@ -4,6 +4,7 @@
     - rpis
     - zblades
   become: yes
+  gather_facts: no
 
   tasks:
 

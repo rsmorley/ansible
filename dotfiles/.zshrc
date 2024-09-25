@@ -134,6 +134,9 @@ fi
 if [ -n "/home/scoot/bin" ]; then
   export PATH=$PATH:/home/scoot/bin
 fi
+if [ -n "/usr/local/go/bin" ]; then
+  export PATH=$PATH:/usr/local/go/bin
+fi
 
 export EDITOR=nvim
 alias vim=nvim
