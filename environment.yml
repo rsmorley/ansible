@@ -3,7 +3,6 @@
   hosts: 
     - rpis
     - zblades
-    - windoze
   become: yes
   gather_facts: no
 
@@ -40,12 +39,29 @@
       name: scoot
       shell: /bin/zsh
 
+  - name: install git, password-store
+    apt:
+      pkg:
+      - git
+      - pass
+      state: present
+
+- name: set up configs
+  hosts: 
+    - rpis
+    - zblades
+    - windoze
+  become: yes
+  gather_facts: no
+
+  tasks: 
+
   - name: Copy zsh/p10k dotfiles files into ~/
     copy:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}" 
       owner: scoot
-      group: scoot
+      group: users
       mode: 0644
     with_items:
       - src: "dotfiles/.zshrc"
@@ -63,17 +79,10 @@
       src: "{{ item.src }}"
       dest: "{{ item.dest }}" 
       owner: scoot
-      group: scoot
+      group: users
       mode: 0644
     with_items:
       - src: "configfiles/btop"
         dest: "~/.config"
     become: no
-
-  - name: install git, password-store
-    apt:
-      pkg:
-      - git
-      - pass
-      state: present
 
