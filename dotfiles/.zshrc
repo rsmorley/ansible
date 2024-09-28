@@ -102,15 +102,14 @@ alias bat=batcat
 if [ -n "${commands[fzf-share]}" ]; then
   source "$(fzf-share)/key-bindings.zsh"
   source "$(fzf-share)/completion.zsh"
-fi
 # fzf bindings and completions in ubuntu
-if [ -n "/usr/share/doc/fzf/examples" ]; then
+elif [ -d /usr/share/doc/fzf/examples ]; then
   source /usr/share/doc/fzf/examples/key-bindings.zsh
   source /usr/share/doc/fzf/examples/completion.zsh
 fi
 
 # remap Alt-c to Ctrl-e
-bindkey '\C-e' fzf-cd-widget
+#bindkey '\C-e' fzf-cd-widget
 
 # zoxide
 # remove zinit alias to prevent conflict
