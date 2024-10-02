@@ -106,6 +106,10 @@ if [ -n "${commands[fzf-share]}" ]; then
 elif [ -d /usr/share/doc/fzf/examples ]; then
   source /usr/share/doc/fzf/examples/key-bindings.zsh
   source /usr/share/doc/fzf/examples/completion.zsh
+# fzf bindings and completions in arch
+elif [ -d /usr/share/fzf ]; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
 fi
 
 # remap Alt-c to Ctrl-e

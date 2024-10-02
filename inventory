@@ -7,3 +7,6 @@ rpi-hl ansible_host=192.168.20.20
 
 [windoze]
 north-tower ansible_host=192.168.20.201
+
+[arch]
+linux-hive ansible_host=192.168.20.137 ansible_port=22
