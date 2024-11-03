@@ -21,16 +21,16 @@
       groups: docker
       append: true # don't remove existing groups
 
-  # Pulls the portainer image (Ubuntu)
+  # Pulls the portainer image 
   - name: Pull portainer image
     community.docker.docker_image:
-      name: "portainer/portainer-ce:linux-arm64"
+      name: "portainer/portainer-ce:latest"
       source: pull
 
   - name: Create portainer container
     community.docker.docker_container:
       name: "portainer"
-      image: "portainer/portainer-ce:linux-arm64"
+      image: "portainer/portainer-ce:latest"
       restart_policy: always
       state: started
       ports:

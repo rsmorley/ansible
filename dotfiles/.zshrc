@@ -95,7 +95,10 @@ alias ls="eza --color=always --long --no-filesize --icons=always --no-time --no-
 alias ll="eza --color=always --long --icons=always"
 alias la="eza --color=always --long --icons=always -a"
 
-alias bat=batcat
+# make bat work on raspbian
+if ! type "bat" > /dev/null; then
+  alias bat=batcat
+fi
 # Shell integrations
 
 # fzf bindings and completions in nix

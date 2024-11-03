@@ -29,14 +29,6 @@
       update_cache: yes
       cache_valid_time: 3600
 
-  - name: Git checkout nvchad for neovim config
-    ansible.builtin.git:
-      repo: "https://github.com/NvChad/starter.git"
-      dest: "~/.config/nvim/"
-      version: main
-      accept_newhostkey: yes
-      depth: 1
-    become: no
 
 
 - name: install neovim 9 on zblades
@@ -51,4 +43,27 @@
       pkg:
       - neovim
       state: present
+
+- name: common tasks
+  hosts: 
+    - localhost
+  become: yes
+  gather_facts: no
+
+  tasks: 
+
+  - name: check if nvchad already exists
+    stat:
+      path: "~/.config/nvim/lua/chadrc.lua"
+    register: nvchad
+      
+  - name: Git checkout nvchad for neovim config
+    ansible.builtin.git:
+      repo: "https://github.com/NvChad/starter.git"
+      dest: "~/.config/nvim/"
+      version: main
+      accept_newhostkey: yes
+      depth: 1
+    when: not nvchad.stat.exists
+    become: no
 
